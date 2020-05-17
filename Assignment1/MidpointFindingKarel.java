@@ -17,26 +17,76 @@ public class MidpointFindingKarel extends SuperKarel {
 	private static final long serialVersionUID = 1L;
 
 	// You fill in this part
-	public void run()	{
-		moveAcross();
-		moveBackwards();
-		
+	public void run () {
+		beepersAtEnd();
+		while (frontIsClear())	{
+			WestMovement();
+			EastMovement();
+		}
+		finalMovement();
 	}
-	private void moveAcross()	{
+	private void beepersAtEnd()	{
 		putBeeper();
 		while (frontIsClear())	{
 			move();
-			if (frontIsClear())	{
-				move();
+		}
+		if (noBeepersPresent())	{
+			putBeeper();
+			turnAround();
+		}
+	}
+	private void WestMovement()	{
+		if (facingWest())	{
+			move();
+			if (noBeepersPresent())	{
+				//putBeeper();
 				putBeeper();
 			}
+			turnAround();
+			move();
+			pickBeeper();
+			turnAround();
+			move();
+			move();
 		}
+		detectBeeper();
 		turnAround();
+		
 	}
-	public void moveBackwards()	{
-		move();
-		if (noBeepersPresent())	{
-			
+	private void EastMovement()	{
+		if (facingEast())	{
+			pickBeeper();
+			move();
+			if (noBeepersPresent()) {
+				putBeeper();
+			}
+			move();
+			detectBeeper();
+			turnAround();
 		}
 	}
+	private void detectBeeper()	{
+		while (noBeepersPresent())	{
+			if (frontIsClear())	{
+				move();
+			}
+			if (frontIsBlocked())	{
+				turnAround();
+				while(frontIsClear())	{
+					if (noBeepersPresent())	{
+						move();
+					}
+					if (beepersPresent())	{
+						turnLeft();
+					}
+				}
+			}
+		}
+	}
+	private void finalMovement()	{
+		if (facingSouth()) {
+			turnRight();
+		}
+	}
+	
 }
